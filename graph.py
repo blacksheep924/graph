@@ -17,13 +17,13 @@ def animate(i):  # Animation function
     return [line, line2]
 
 # Fetching data from the Alpha Vantage API
-url = "https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=AAPL&apikey=********"
+url = "https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol=IBM&apikey=demo"
 r = requests.get(url)
 data = r.json()
+print(data)
 
-
-if "Monthly Time Series" in data:
-    monthly_data = data["Monthly Time Series"]
+if "Monthly Adjusted Time Series" in data:
+    monthly_data = data["Monthly Adjusted Time Series"]
     # Extract the "4. close" value for each month
     close_prices = {date: float(details["4. close"]) for date, details in monthly_data.items()}
 
@@ -41,12 +41,10 @@ for value in values:
     new_value += x / value
 
     values2.append(new_value*value)
-    print(new_value)
 investement = []
 for value in values:
     investement.append(x)
     x+= random.randint(0,150)
-print(investement[-1])
 # Setting up the figure and line object
 fig, ax = plt.subplots()
 fig.patch.set_facecolor('black')  # Background of the entire figure
