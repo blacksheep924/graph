@@ -79,7 +79,9 @@ ani = FuncAnimation(
     init_func=init, 
     blit=False,
     #interval augmente la vitesse du défilement, nombre plus haut -> plus rapide
-    interval = 100
+    interval = 100,
+    repeat = False
+    #repeat sur false si tu veux arreter l'animation a la fin ou repat = True si tu veux que l'animation recommence
 )
 
 
