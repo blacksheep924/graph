@@ -14,18 +14,27 @@ def init():  # Initialization function
 def animate(i):  # Animation function
     line.set_data(dates[:i], investement[:i])
     line2.set_data(dates[:i], values2[:i])  # Set data for second line
+        # Clear existing text to avoid clutter
+    for txt in ax.texts:
+        txt.remove()
+    
+    # Add text for the current point, ici on change pour le nom de entreprise ou la valeur de la courbe apres color on peut changer la couleur et la taille de la police avec fontsize
+    if i < len(dates):  # Ensure index is within range
+        ax.text(dates[i], investement[i], f'{round(investement[i])} Investit', color='#884b8f', fontsize=8)
+        ax.text(dates[i], values2[i], f'{round(values2[i])} IBM', color='orange', fontsize=8)
+
     return [line, line2]
 
-# Fetching data from the Alpha Vantage API
+# Fetching data from the Alpha Vantage API, rentrer une clef pour l'api, puis on change a la partie symbol le nom de l'action en bourse exemple Apple = APPL
 url = "https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol=IBM&apikey=demo"
 r = requests.get(url)
 data = r.json()
-print(data)
+
 
 if "Monthly Adjusted Time Series" in data:
     monthly_data = data["Monthly Adjusted Time Series"]
     # Extract the "4. close" value for each month
-    close_prices = {date: float(details["4. close"]) for date, details in monthly_data.items()}
+    close_prices = {date: float(details["5. adjusted close"]) for date, details in monthly_data.items()}
 
 # Prepare dates and values
 key_list = sorted(close_prices.keys())  # Ensure dates are sorted
@@ -68,7 +77,8 @@ ani = FuncAnimation(
     func=animate, 
     frames=len(dates), 
     init_func=init, 
-    blit=True,
+    blit=False,
+    #interval augmente la vitesse du défilement, nombre plus haut -> plus rapide
     interval = 100
 )
 
